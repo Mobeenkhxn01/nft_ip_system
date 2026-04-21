@@ -1,8 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { assetsApi, licensesApi, infringementsApi, dashboardApi } from "@/lib/api-client";
 
-// ─── Asset Hooks ──────────────────────────────────────────────────────────────
-
 export function useAssets(params?: { type?: string; status?: string; page?: number }) {
   return useQuery({
     queryKey: ["assets", params],
@@ -21,7 +19,7 @@ export function useAsset(id: string) {
 export function useCreateAsset() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: FormData) => assetsApi.create(data).then((r) => r.data),
+    mutationFn: (data: FormData) => assetsApi.create(data as any).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["assets"] }),
   });
 }
