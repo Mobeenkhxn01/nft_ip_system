@@ -7,11 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-<<<<<<< HEAD
     "postinstall":"prisma generate"
-=======
-    "postinstall": "prisma generate"
->>>>>>> e4d3587 (project completion)
   },
   "dependencies": {
     "@prisma/client": "^7.7.0",
