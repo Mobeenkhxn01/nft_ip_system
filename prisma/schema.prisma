@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+}
+
+model Asset {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  description     String
+  assetType       String
+  creatorId       String
+  creatorAddress  String
+  licenseType     String
+  cryptoHash      String   @unique
+  perceptualHash  String
+  ipfsHash        String?
+  nftTokenId      String?
+  nftContract     String?
+  status          String   @default("pending")
+  mintedAt        DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  licenses        License[]
+  infringements   Infringement[]
+}
+
+model License {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  assetId         String   @db.ObjectId
+  licenseeId      String
+  licenseType     String
+  terms           String
+  royaltyPercent  Float
+  expiresAt       DateTime?
+  isActive        Boolean  @default(true)
+  transactionHash String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  asset           Asset    @relation(fields: [assetId], references: [id])
+}
+
+model Infringement {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  assetId         String   @db.ObjectId
+  similarityScore Float
+  detectedAt      DateTime @default(now())
+  status          String   @default("pending")
+  evidenceHash    String?
+  reportUrl       String?
+  platform        String?
+
+  asset           Asset    @relation(fields: [assetId], references: [id])
+}
+
+model User {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  walletAddress   String   @unique
+  name            String?
+  email           String?  @unique
+  role            String   @default("creator")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
